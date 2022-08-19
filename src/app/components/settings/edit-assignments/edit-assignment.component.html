@@ -1,0 +1,59 @@
+<div class="container">
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="border border-2 p-2">
+        <label class="align-items-center fw-bold fs-5 mb-2">Assignment Group</label>
+        <form [formGroup]="assignmentGroup" #assignmentForm="ngForm">
+          <mat-form-field class="w-100" appearance="fill">
+            <mat-label>Company Name</mat-label>
+            <input matInput type="text" autocomplete="off" formControlName="companyName">
+          </mat-form-field>
+
+          <div class="w-100 float-end mx-2 mb-2">
+            <button class="float-end" mat-raised-button style="background-color: #039be5" (click)="addException()">
+              Add assignment field
+            </button>
+          </div>
+
+          <div class="w-100" formArrayName="assignment">
+            <div class="row" *ngFor="let assignment of getAllAssignmentControl(); let i = index"
+                 [formGroupName]="i">
+              <mat-form-field class="w-100" appearance="fill">
+                <mat-label>Assignment Type</mat-label>
+                <input matInput type="text" autocomplete="off" formControlName="value">
+                <button class="float-end" matSuffix mat-icon-button aria-label="Clear" matTooltip="Delete Assignment"
+                        matTooltipPosition="right">
+                  <mat-icon style="color: red" (click)="onCancelException(i)">clear</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </div>
+          <button
+            mat-raised-button
+            color="primary"
+            [ngClass]="{'invalid-form-assignment':assignmentGroup.invalid||getAllAssignmentControl().length<=0}"
+            (click)="onAddCompanyGroup()"
+          >Add Company Group
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <mat-accordion multi="true">
+        <mat-expansion-panel *ngFor="let company of groupClient">
+          <mat-expansion-panel-header class="fw-bold">
+            {{company.clientName}}
+          </mat-expansion-panel-header>
+          <mat-action-row>
+            <a mat-raised-button color="primary">Edit</a>
+            <button mat-button color="warn" (click)="onDellCompanyGroup(company.id!)">Delete</button>
+          </mat-action-row>
+          <mat-panel-title *ngFor="let type of company.assignments">
+            <p>{{type.value}}</p>
+          </mat-panel-title>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+</div>
+

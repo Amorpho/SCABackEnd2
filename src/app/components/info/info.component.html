@@ -1,0 +1,75 @@
+<div class="container">
+  <div class="row">
+    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
+                type="button" role="tab" aria-controls="pills-home" aria-selected="true">Commercial Heavy and Specialty
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"
+                type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Relationship
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact"
+                type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Exceptions
+        </button>
+      </li>
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+      <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+        <div class="container">
+          <div class="row">
+            <figure class="figure">
+              <img src="assets/img/Heavy.JPG" class="figure-img img-fluid rounded" alt="...">
+            </figure>
+            <figure class="figure">
+              <img src="assets/img/nodb.JPG" class="figure-img img-fluid rounded" alt="...">
+            </figure>
+            <figure class="figure">
+              <img src="assets/img/notheavy.JPG" class="figure-img img-fluid rounded" alt="...">
+            </figure>
+            <figure class="figure">
+              <img src="assets/img/special.JPG" class="figure-img img-fluid rounded" alt="...">
+            </figure>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+        <div class="container">
+          <div class="row">
+            <figure class="figure">
+              <img src="assets/img/relationship.JPG" class="figure-img img-fluid rounded" alt="...">
+            </figure>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+
+        <div class="row border my-2" *ngFor="let group of listCompanyGroup">
+          <h2>{{group.companyName}}</h2>
+          <table class="table">
+            <thead>
+            <tr>
+              <th>Assignment type</th>
+              <th>Exceptions</th>
+              <th>Status</th>
+            </tr>
+            </thead>
+            <tbody *ngFor="let assignment of group.assignmentType">
+            <tr>
+              <td [attr.rowspan]="assignment.assignmentRules.length+1">{{ assignment.assignmentName}}</td>
+            </tr>
+            <tr *ngFor="let rules of assignment.assignmentRules">
+              <td>{{rules.exception}}</td>
+              <td>{{rules.status}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

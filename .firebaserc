@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "scadb-71afc": {
+      "hosting": {
+        "sca": [
+          "scadb-71afc"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "scadb-71afc"
+  }
+}

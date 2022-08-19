@@ -1,0 +1,25 @@
+.father{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.viewport {
+
+  height: 500px;
+  width: 100%;
+  border: 1px solid black;
+  /*height: 50%;*/
+  /*width: 50%;*/
+  /*border: 1px black;*/
+  /*text-align: center;*/
+}
+table {
+  width: 100%;
+}
+
+tr:hover {
+  background-color: cornsilk;
+}
+
+

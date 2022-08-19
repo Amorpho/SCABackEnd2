@@ -1,0 +1,186 @@
+<div class="row my-2">
+  <div class="col-lg-9 shadow-lg ">
+    <div class="container shadow-sm mb-2 my-2">
+      <form [formGroup]="sortForm">
+        <!--      field claim number-->
+        <mat-form-field class="w-auto mx-1 ">
+          <mat-label>Claim Number</mat-label>
+          <input matInput placeholder="ABC1234657"
+                 autocomplete="off"
+                 formControlName="claimNumber"
+          >
+        </mat-form-field>
+        <!--      field claim number end-->
+
+        <!--      data picker select -->
+        <mat-form-field class="w-auto mx-1">
+          <mat-label>Enter a date range</mat-label>
+          <mat-date-range-input formGroupName="range" [rangePicker]="picker">
+            <input matStartDate formControlName="startDate" placeholder="Start date">
+            <input matEndDate formControlName="endDate" placeholder="End date">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+        <!--      data picker select end -->
+
+        <!-- Select Status -->
+        <mat-form-field class="w-auto mx-1" [ngClass]="{estadoSelect:statusFastSearch!=''}">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status"
+          >
+            <mat-option value=''>--Select--</mat-option>
+            <mat-option *ngFor="let option of statusSelect" value="{{option}}"> {{ option }}  </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!-- Select Status END -->
+
+        <!-- Select Assignment Type fast search -->
+        <mat-form-field class="w-auto mx-1" [ngClass]="{estadoSelect: assignmentTypeFastSearch!=''}">
+          <mat-label>Assignment Type</mat-label>
+          <mat-select formControlName="assignment">
+            <mat-option value="">--Select--</mat-option>
+            <mat-option value="{{assignment}}" *ngFor="let assignment of assignments"> {{assignment}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!-- Select Assignment Type END -->
+
+        <!-- Select clients fast search-->
+        <mat-form-field class="w-auto mx-1" [ngClass]="{estadoSelect: clientFastSearch!='' }">
+          <mat-label>Client</mat-label>
+          <mat-select formControlName="client">
+            <mat-option value="">--Select--</mat-option>
+            <mat-option *ngFor="let client of groupClient"
+                        [value]="client.clientName">{{client.clientName}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!-- Select clients END -->
+
+        <!-- Select processed fast search-->
+        <mat-form-field class="w-auto mx-1" [ngClass]="{estadoSelect: clientFastSearch!='' }">
+          <mat-label>Processed By</mat-label>
+          <mat-select formControlName="processedBy">
+            <mat-option value="">--Select--</mat-option>
+            <mat-option *ngFor="let user of listUser" [value]="user">{{user}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!-- Select clients END -->
+        <button
+          class="btnsort w-auto mx-2 "
+          type="submit"
+          style="background-color: #519AFA"
+          mat-raised-button
+          (click)="onSortData()"
+        >Sort
+        </button>
+      </form>
+    </div>
+    <div class="container shadow-sm my-2">
+      <div class="row  center-h center-v ">
+        <div class="my-2 father">
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="claimNumber" value="claimNumber"
+                   [(ngModel)]="claimNumberBoolean">
+            <label class="form-check-label" for="claimNumber">Claim Number</label>
+          </div>
+
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="date" value="date"
+                   [(ngModel)]="dateBoolean">
+            <label class="form-check-label" for="date">Date</label>
+          </div>
+
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="time" value="time"
+                   [(ngModel)]="timeBoolean">
+            <label class="form-check-label" for="time">Time</label>
+          </div>
+
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="status" value="status" [(ngModel)]="statusBoolean">
+            <label class="form-check-label" for="status">Status</label>
+          </div>
+
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="processedBy" value="processedBy"
+                   [(ngModel)]="processedByBoolean">
+            <label class="form-check-label" for="processedBy">Processed By</label>
+          </div>
+
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="assignmentType" value="client"
+                   [(ngModel)]="assignmentBoolean">
+            <label class="form-check-label" for="assignmentType">Assignment type</label>
+          </div>
+
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="client" value="client" [(ngModel)]="clientBoolean">
+            <label class="form-check-label" for="client">Client</label>
+          </div>
+
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="exception1" value="client"
+                   [(ngModel)]="exception1Boolean">
+            <label class="form-check-label" for="exception1">Exception 1</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="exception2" value="client"
+                   [(ngModel)]="exception2Boolean">
+            <label class="form-check-label" for="exception2">Exception 2</label>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="my-3">
+      <cdk-virtual-scroll-viewport itemSize="5" class="viewport">
+        <table class="table-bordered text-center">
+          <thead>
+          <tr>
+            <th *ngIf="claimNumberBoolean" class="border border-end" scope="col">Claim Number</th>
+            <th *ngIf="dateBoolean" class="border border-end" scope="col">Date</th>
+            <th *ngIf="timeBoolean" class="border border-end" scope="col">Time</th>
+            <th *ngIf="statusBoolean" class="border border-end" scope="col">Status</th>
+            <th *ngIf="processedByBoolean" class="border border-end" scope="col">Processed By</th>
+            <th *ngIf="assignmentBoolean" class="border border-end" scope="col">Assignment type</th>
+            <th *ngIf="clientBoolean" class="border border-end" scope="col">Client</th>
+            <th *ngIf="exception1Boolean" class="border border-end" scope="col">Exception 1</th>
+            <th *ngIf="exception2Boolean" class="border border-end" scope="col">Exception 2</th>
+          </tr>
+          </thead>
+          <tbody class="border border-2"
+                 *ngFor="let element of dataSource"
+          >
+          <tr>
+            <td *ngIf="claimNumberBoolean">{{ element.claimNumber  }} </td>
+            <td *ngIf="dateBoolean">{{ element.date | date:'MM/dd/YY' }}</td>
+            <td *ngIf="timeBoolean">{{ element.date | date:'hh:mm a' }}</td>
+            <td *ngIf="statusBoolean">{{ element.status  }}</td>
+            <td *ngIf="processedByBoolean">{{ element.processedBy  }} </td>
+            <td *ngIf="assignmentBoolean">{{ element.assignment  }}</td>
+            <td *ngIf="clientBoolean">{{ element.client }}</td>
+            <td *ngIf="exception1Boolean">{{ element.exception  }}</td>
+            <td *ngIf="exception2Boolean">{{ element.exception2  }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </cdk-virtual-scroll-viewport>
+    </div>
+  </div>
+</div>
+<div class="row my-5 shadow" style="width: 76%;">
+  <div class="flex">
+    <div class="flex-item">
+      <div style="display: block;">
+        <canvas baseChart
+                [data]="lineChartData"
+                [options]="lineChartOptions"
+                [type]="lineChartType">
+          <!--                (chartHover)="chartHovered($event)"-->
+          <!--                (chartClick)="chartClicked($event)"-->
+
+        </canvas>
+      </div>
+    </div>
+  </div>
+</div>

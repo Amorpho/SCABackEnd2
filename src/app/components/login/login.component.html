@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="row">
+    <div class="col text-center">
+
+    </div>
+    <div class="col shadow-lg  border border-2 my-5">
+      <div class="card-img text-center mt-2">
+        <img class="imgPerfil" src="https://core.sca.claims/Images/SCAClaimServices.png">
+      </div>
+
+      <form class="my-5" [formGroup]="userForm" (ngSubmit)="onSubmit()" #formDirective="ngForm">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>User</mat-label>
+          <input matInput placeholder="User Name" formControlName="userName" #userName autocomplete="off">
+        </mat-form-field>
+
+        <mat-form-field class="w-100" appearance="fill">
+          <mat-label>Enter your password</mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'" formControlName="password"  #password>
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                  [attr.aria-pressed]="hide" type="button">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+        <hr>
+        <button class="w-100" mat-raised-button color="primary" type="submit">Login</button>
+      </form>
+    </div>
+    <div class="col">
+
+    </div>
+  </div>
+</div>

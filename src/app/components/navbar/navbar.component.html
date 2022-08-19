@@ -1,0 +1,70 @@
+<mat-toolbar color="primary" class="mb-3">
+  <mat-toolbar-row>
+    <!--    <span>My App</span>-->
+    <span>{{processedNavbar}}</span>
+    <span class="mx-2 border-end border "></span>
+    <span>Today: {{totalWork}}</span>
+    <span class="mx-2"></span>
+    <span>Work: {{yourwork  }}  </span>
+    <span class="mx-2"></span>
+    <span>Percentage: {{percentage |percent}} </span>
+    <span class="mx-2"></span>
+    <button mat-raised-button routerLink="dailyTracker" routerLinkActive="activebutton">Daily Tracker</button>
+    <span class="mx-2"></span>
+    <button mat-raised-button routerLink="/home/info" routerLinkActive="activebutton">Info</button>
+    <span class="mx-2"></span>
+    <button mat-raised-button routerLink="/home/reports" routerLinkActive="activebutton">Reports</button>
+    <span class="mx-2"></span>
+    <button mat-raised-button routerLink="/home/settings" routerLinkActive="activebutton">Settings</button>
+    <span class="spacer"></span>
+    <span>
+      <h5> {{ date | date: 'MMM d, y, h:mm a'  }} </h5>
+    </span>
+
+
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="onLogout()">Close session</button>
+    </mat-menu>
+
+  </mat-toolbar-row>
+
+
+</mat-toolbar>
+
+<!--navbar bootstrap-->
+
+<!--<ul class="nav nav-tabs">-->
+<!--  <div class="nav-item  border-end p-2">-->
+<!--    <h3 (click)="onLogout()" style="cursor: pointer"-->
+<!--        class="mx-4 text-center align-items-center">{{processedNavbar}}</h3>-->
+<!--  </div>-->
+<!--  <div class="nav-item  border-end p-3 ">-->
+<!--    <p class="mx-2">Today: {{totalWork}}</p>-->
+<!--  </div>-->
+<!--  <div class="nav-item mx-2 p-3">-->
+<!--    <p>Work: {{yourwork  }}  </p>-->
+<!--  </div>-->
+<!--  <div class="nav-item mx-2 p-3">-->
+<!--    <p>Percentage: {{percentage |percent}}</p>-->
+<!--  </div>-->
+<!--  <li class="nav-item">-->
+<!--    <a class="nav-link" routerLink="dailyTracker" routerLinkActive="active">Daily Tracker</a>-->
+<!--  </li>-->
+<!--  <li class="nav-item">-->
+<!--    <a class="nav-link" routerLink="/home/info" routerLinkActive="active">Info</a>-->
+<!--  </li>-->
+<!--  <li class="nav-item">-->
+<!--    <a class="nav-link" routerLink="/home/reports" routerLinkActive="active">Reports</a>-->
+<!--  </li>-->
+<!--  <li class="nav-item">-->
+<!--    <a class="nav-link" routerLink="/home/settings" routerLinkActive="active">Settings</a>-->
+<!--  </li>-->
+<!--  <div>-->
+<!--    <h5 class="date"> {{ date | date: 'MMM d, y, h:mm a'  }} </h5>-->
+<!--  </div>-->
+<!--</ul>-->
+
+

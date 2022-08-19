@@ -1,0 +1,85 @@
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.contenedor {
+  height: 800px;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+table {
+  width: 100%;
+}
+
+tr:hover {
+  background-color: cornsilk;
+}
+
+.viewport {
+  height: 88%;
+  width: 100%;
+  border: 1px black;
+  text-align: center;
+}
+
+.chousenOne:hover {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.updating {
+  background-color: aqua;
+  color: black;
+  width: 60% !important;;
+}
+
+.btnDelete {
+  color: black;
+  width: 20%;
+}
+
+.spinner-border {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.btnAdd {
+  background-color: forestgreen;
+  color: black;
+  width: 100%;
+}
+
+.btnCalcel {
+  background-color: gray;
+  color: black;
+  width: 20%;
+}
+
+.btn-success {
+  width: 100%;
+}
+
+.btnFilter {
+  min-height: 30px;
+  max-height: 30px;
+  margin-top: 15px;
+
+}
+
+.btnsort {
+  background-color: #519AFA;
+}
+
+.estadoSelect {
+  font-weight: bolder;
+
+}
+
+.invalidDailyForm {
+  background-color: dimgray;
+}

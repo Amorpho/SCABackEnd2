@@ -1,0 +1,223 @@
+<div class="row mt-4 contenedor mx-4">
+
+  <div class="col-lg-3 border shadow">
+    <form class="example-form" [formGroup]="dailyForm" #dailyNgForm="ngForm">
+      <h2 class="text-center mt-2">Daily Tracker
+        <div *ngIf="loadingSpinner" class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </h2>
+      <hr>
+      <mat-form-field class="example-full-width " appearance="outline">
+        <mat-label>Claim Number</mat-label>
+        <input matInput placeholder="ABC1234657" formControlName="claimNumber" autocomplete="off"
+               (click)="auntoFill()">
+      </mat-form-field>
+
+
+      <!-- Select Status -->
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status" [(ngModel)]="statusSelected">
+          <mat-option *ngFor="let option of statusSelect" value="{{option}}"> {{ option }}  </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <!-- Select Status END -->
+
+
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Assignment</mat-label>
+        <mat-select formControlName="assignment" [(ngModel)]="valueAssignment" (click)="onSelectAssignment()">
+          <mat-option value="">-- None --</mat-option>
+          <mat-optgroup *ngFor="let group of groupClient" [label]="group.clientName">
+            <mat-option *ngFor="let client of group.assignments;let i = index" value="{{ client.value }}"
+                        (onSelectionChange)="optionSelected($event)"
+            >
+              {{ valueAssignment === '' ? client.value : group.clientName + ' / ' + client.value }}
+            </mat-option>
+          </mat-optgroup>
+        </mat-select>
+      </mat-form-field>
+
+
+      <!--Exceptions select-->
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Exception 1</mat-label>
+        <mat-select formControlName="exceptions" [(ngModel)]="exceptionDefault">
+          <mat-option value="">-- None --</mat-option>
+          <mat-option [value]="exception.description"
+                      *ngFor="let exception of exceptions">{{exception.description}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <!--Exceptions select END -->
+
+      <!--Exceptions select-->
+      <div>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Exception 2</mat-label>
+          <mat-select formControlName="exception2" [(ngModel)]="exceptionDefault2">
+            <mat-option value="">-- None --</mat-option>
+            <mat-option [value]="exception.description"
+                        *ngFor="let exception of exceptions">{{exception.description}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!--Exceptions select END -->
+      <input type="hidden" formControlName="date">
+      <input type="hidden" formControlName="processed">
+      <div class="input-group">
+        <button
+          type="submit"
+          class="btn btn-success btn-lg my-2"
+          (click)="onSubmitDaily()"
+          mat-raised-button
+          [ngClass]="{updating: update,invalidDailyForm:enableAddrecord()}"
+        > {{ !update ? 'Add Record' : 'Update Record ' }}
+        </button>
+
+        <button
+          *ngIf="update"
+          type="submit"
+          class="btnDelete btn-danger btn-lg my-2"
+          (click)="onDelete()"
+          mat-raised-button
+          [disabled]="enableAddrecord()"
+        > Delete
+        </button>
+
+        <button
+          *ngIf="update"
+          type="button"
+          class="btn-secondary  btn-lg my-2"
+          (click)="onCancel()"
+          mat-raised-button
+          [disabled]="enableAddrecord()"
+          [ngClass]="{btnCalcel: update }"
+        > Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+  <div class="col-lg-9 shadow-lg">
+    <div class="container">
+      <div class="row my-2 ">
+        <form [formGroup]="sortForm">
+          <mat-form-field class="w-auto mx-1 ">
+            <mat-label>Claim Number</mat-label>
+            <input matInput placeholder="ABC1234657"
+                   autocomplete="off"
+                   formControlName="claimNumberSearch"
+                   [(ngModel)]="claimNumberFastSearch">
+          </mat-form-field>
+
+          <mat-form-field class="w-auto mx-1">
+            <mat-label>Choose a date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="datePicker" [(ngModel)]="datePicker">
+            <mat-datepicker-toggle matSuffix [for]="picker">
+              <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+
+          <!-- Select Status -->
+          <mat-form-field class="w-auto mx-1" [ngClass]="{estadoSelect:statusFastSearch!=''}">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="statusSearch" [(ngModel)]="statusFastSearch"
+                        (selectionChange)="onselectStatus()">
+              <mat-option value=''>--Select--</mat-option>
+              <mat-option *ngFor="let option of statusSelect" value="{{option}}"> {{ option }}  </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <!-- Select Status END -->
+
+          <!-- Select Assignment Type fast search -->
+          <mat-form-field class="w-auto mx-1" [ngClass]="{estadoSelect: assignmentTypeFastSearch!=''}">
+            <mat-label>Assignment Type</mat-label>
+            <mat-select formControlName="assignmentSearch" [(ngModel)]="assignmentTypeFastSearch">
+              <mat-option value="">-- None --</mat-option>
+              <mat-optgroup *ngFor="let group of groupClient" [label]="group.clientName">
+                <mat-option *ngFor="let client of group.assignments;let i = index" value="{{ client.value }}"
+                            (onSelectionChange)="optionSelected($event)"
+                >
+                  {{ valueAssignment === '' ? client.value : group.clientName + ' / ' + client.value }}
+                </mat-option>
+              </mat-optgroup>
+            </mat-select>
+          </mat-form-field>
+          <!-- Select Assignment Type END -->
+
+          <!-- Select clients fast search-->
+          <mat-form-field class="w-auto mx-1" [ngClass]="{estadoSelect: clientFastSearch!='' }">
+            <mat-label>Client</mat-label>
+            <mat-select formControlName="client" [(ngModel)]="clientFastSearch">
+              <mat-option value="">--Select--</mat-option>
+              <mat-option *ngFor="let client of groupClient"
+                          [value]="client.clientName">{{client.clientName}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <!-- Select clients END -->
+
+          <!-- Select processed fast search-->
+          <mat-form-field class="w-auto mx-1" [ngClass]="{estadoSelect: clientFastSearch!='' }">
+            <mat-label>Processed By</mat-label>
+            <mat-select formControlName="processedSearch" [(ngModel)]="processedFastSearch">
+              <mat-option value="">--Select--</mat-option>
+              <mat-option *ngFor="let user of listUser" [value]="user">{{user}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <!-- Select clients END -->
+          <button
+            class="btnsort w-auto mx-2 "
+            type="submit"
+            mat-raised-button
+            (click)="onSubmitSort()"
+          >Sort
+          </button>
+        </form>
+      </div>
+    </div>
+
+
+    <cdk-virtual-scroll-viewport itemSize="5" class="viewport">
+      <table class="table-bordered">
+        <thead>
+        <tr>
+          <th class="border border-end" scope="col">Claim Number</th>
+          <th class="border border-end" scope="col">Date</th>
+          <th class="border border-end" scope="col">Time</th>
+          <th class="border border-end" scope="col">Status</th>
+          <th class="border border-end" scope="col">Processed By</th>
+          <th class="border border-end" scope="col">Assignment type</th>
+          <th class="border border-end" scope="col">Client</th>
+          <th class="border border-end" scope="col">Exception 1</th>
+          <th class="border border-end" scope="col">Exception 2</th>
+        </tr>
+        </thead>
+        <tbody class="border border-2"
+               *ngFor="let element of dataSource |
+               filterPipe: claimNumberFastSearch: 'claimNumber' |
+               filterPipe: statusFastSearch: 'status' |
+               filterPipe: assignmentTypeFastSearch: 'assignmentType' |
+               filterPipe: clientFastSearch: 'client' |
+               filterPipe: processedFastSearch: 'processedBy'
+              "
+        >
+        <tr>
+          <td class="chousenOne" (click)="updateClaim(element)">{{ element.claimNumber  }} </td>
+          <td>{{ element.date | date:'MM/dd/YY' }}</td>
+          <td>{{ element.date | date:'hh:mm a' }}</td>
+          <td>{{ element.status  }}</td>
+          <td>{{ element.processedBy  }} </td>
+          <td>{{ element.assignmentType  }}</td>
+          <td>{{ element.client }}</td>
+          <td>{{ element.exception  }}</td>
+          <td>{{ element.exception2  }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </cdk-virtual-scroll-viewport>
+  </div>
+
+</div>
+

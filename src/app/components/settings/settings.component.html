@@ -1,0 +1,75 @@
+<div class="d-flex align-items-start">
+  <div class="rightMenu nav flex-column nav-pills mx-2" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+    <button
+      class="nav-link active border"
+      id="v-pills-dailyReport-tab"
+      data-bs-toggle="pill"
+      data-bs-target="#v-pills-home"
+      type="button"
+      role="tab"
+      aria-controls="v-pills-home"
+      routerLink="/home/settings/"
+      aria-selected="true">Users
+    </button>
+    <button
+      class="nav-link border"
+      id="v-pills-customReport-tab"
+      data-bs-toggle="pill"
+      data-bs-target="#v-pills-profile"
+      type="button"
+      role="tab"
+      aria-controls="v-pills-profile"
+      aria-selected="false"
+      routerLink="/home/settings/"
+    >New User
+    </button>
+
+    <button
+      class="nav-link border"
+      id="v-pills-edit-exceptions-tab"
+      data-bs-toggle="pill"
+      data-bs-target="#v-pills-edit-exceptions"
+      type="button"
+      role="tab"
+      aria-controls="v-pills-edit-exceptions"
+      aria-selected="false"
+      routerLink="/home/settings/">
+      Edit Exceptions
+    </button>
+
+    <button
+      class="nav-link border"
+      id="v-pills-edit-assignments-tab"
+      data-bs-toggle="pill"
+      data-bs-target="#v-pills-edit-assignments"
+      type="button"
+      role="tab"
+      aria-controls="v-pills-edit-assignments"
+      aria-selected="false"
+      routerLink="/home/settings/">
+      Edit Assignments
+    </button>
+
+  </div>
+  <div class="tab-content w-100" id="v-pills-tabContent">
+    <div
+      class="tab-pane fade show active"
+      id="v-pills-home"
+      role="tabpanel"
+      aria-labelledby="v-pills-dailyReport-tab">
+      <app-user></app-user>
+    </div>
+    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-customReport-tab">
+      <app-new-user></app-new-user>
+    </div>
+    <div class="tab-pane fade" id="v-pills-edit-exceptions" role="tabpanel"
+         aria-labelledby="v-pills-edit-exceptions-tab">
+      <app-edit-exceptions></app-edit-exceptions>
+    </div>
+    <div class="tab-pane fade" id="v-pills-edit-assignments" role="tabpanel"
+         aria-labelledby="v-pills-edit-assignments-tab">
+      <app-edit-assignment></app-edit-assignment>
+    </div>
+
+  </div>
+</div>

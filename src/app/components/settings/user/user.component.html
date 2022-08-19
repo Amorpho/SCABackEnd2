@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="col-lg-3">
+    <button mat-raised-button color="primary" (click)="onLoadUsers()">Load Users</button>
+    <hr>
+    <mat-accordion multi="true">
+      <mat-expansion-panel *ngFor="let user of users">
+        <mat-expansion-panel-header class="textMode">
+          {{user.userName |  titlecase }}
+        </mat-expansion-panel-header>
+        <p>{{user.shortName}}</p>
+        <mat-action-row>
+          <button mat-button color="primary" disabled routerLink="/home/settings/edit/{{user.id}}" (click)="onEditUser()">Edit</button>
+          <button mat-button color="warn" [disabled]="user.shortName===actualUser" (click)="onDeleteUser(user)">Delete
+          </button>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  <div class="col-lg-8">
+    <router-outlet></router-outlet>
+  </div>
+</div>
