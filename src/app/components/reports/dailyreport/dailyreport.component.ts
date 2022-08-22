@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {Chart, ChartConfiguration, ChartType} from 'chart.js';
 import {BaseChartDirective} from 'ng2-charts';
-import {Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {default as Annotation} from 'chartjs-plugin-annotation';
 
 import {DailyModelModel} from "../../../shared/dailyModel.model";
@@ -41,7 +41,7 @@ export class DailyreportComponent implements OnInit, OnDestroy {
   // Database local END
   sortForm!: FormGroup;
   dataSource: DailyModelModel[] = []
-  obsDailyReport = Observable;
+  obsDailyReport!: Subscription;
 
   constructor(private FBService: ServiceFirebaseService) {
     Chart.register(Annotation)
@@ -54,6 +54,7 @@ export class DailyreportComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.obsDailyReport.unsubscribe();
   }
 
   initForm() {
@@ -116,7 +117,7 @@ export class DailyreportComponent implements OnInit, OnDestroy {
     let dataCount1: { data: string, counter: number }[] = []
     let dataCount2: { data: string, counter: number }[] = []
 
-    this.FBService.getReport(this.sortForm.value.range.startDate, this.sortForm.value.range.endDate).subscribe(result => {
+    this.obsDailyReport = this.FBService.getReport(this.sortForm.value.range.startDate, this.sortForm.value.range.endDate).subscribe(result => {
         this.dataSource = []
         result.forEach((element: any) => {
           this.dataSource.push({
@@ -249,7 +250,7 @@ export class DailyreportComponent implements OnInit, OnDestroy {
         fill: 'origin',
       },
       {
-        data: [22, 42, 30, 25, 60, 17, 75 ],
+        data: [22, 42, 30, 25, 60, 17, 75],
         label: 'EXCEPTIONS FOUND',
         backgroundColor: 'rgba(77,83,96,0.2)',
         borderColor: 'rgba(77,83,96,1)',

@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const recordSchema = mongoose.Schema({
   id: {type: String},
   claimNumber: {type: String, required: true},
-  date: {Date},
+  date: {type: Date},
   status: {type: String, required: true},
   processedBy: {type: String, required: true},
   assignment: {type: String, required: true},
@@ -13,4 +13,4 @@ const recordSchema = mongoose.Schema({
   exception2: {type: String, required: true},
 })
 
-module.exports = mongoose.model("Record", recordSchema)
+module.exports = mongoose.model("Record", recordSchema);

@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose')
-const path = require('mongoose')
 
 const recordsRoutes = require("./routes/records")
 const postsUsers = require("./routes/users")
@@ -10,7 +9,7 @@ const app = express();
 const urlMongoDb = 'mongodb://localhost:27017/SCADb'
 
 mongoose
-  .connect(urlMongoDb, {useNewUrlParser: true})
+  .connect(urlMongoDb)
   .then(() => {
     console.log("Connection successful")
   })

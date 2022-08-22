@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, NgForm} from "@angular/forms";
 import {ToastrService} from "ngx-toastr";
 import {MatOptionSelectionChange} from "@angular/material/core";
@@ -11,6 +11,7 @@ import {UserModel} from "../../shared/user.model";
 import {ClientGroup} from "../../shared/clien-group.model";
 import {Exceptions} from "../../shared/exceptions.model";
 import {DailyRecord} from "../../shared/daily-record.service";
+import {Observable, Subscription} from "rxjs";
 
 
 @Component({
@@ -18,7 +19,7 @@ import {DailyRecord} from "../../shared/daily-record.service";
   templateUrl: './daily-tracker.component.html',
   styleUrls: ['./daily-tracker.component.css']
 })
-export class DailyTrackerComponent implements OnInit {
+export class DailyTrackerComponent implements OnInit, OnDestroy {
 
   selectedClient = ''
   processed = ''
@@ -33,7 +34,7 @@ export class DailyTrackerComponent implements OnInit {
   dailyForm!: FormGroup;
   sortForm!: FormGroup;
   dataSource: DailyModelModel[] = [];
-  listUser: string [] = [  ]
+  listUser: string [] = []
   //fast Search
   statusFastSearch = ''
   assignmentTypeFastSearch = ''
@@ -46,6 +47,7 @@ export class DailyTrackerComponent implements OnInit {
   exceptions: Exceptions[] = []
   groupClient: ClientGroup[] = []
   @ViewChild('dailyNgForm') dailyNgForm!: NgForm;
+  obsRealtime!: Subscription;
 
   // Database local END
 
@@ -53,15 +55,19 @@ export class DailyTrackerComponent implements OnInit {
   constructor(private _firestoreService: ServiceFirebaseService,
               private toastr: ToastrService,
               private dailyService: DailyService,
-              private dailyRecord: DailyRecord) {
+              private _dailyRecord: DailyRecord) {
   }
 
   ngOnInit(): void {
     this.getUsers();
     this.initProfile();
     this.initForm();
-    this.getAllRecords(this.datePicker);
+    this.getAllRecords();
     this.dailyService.setDailyWork(this.dataSource)
+  }
+
+  ngOnDestroy() {
+    this.obsRealtime.unsubscribe();
   }
 
   initProfile() {
@@ -204,12 +210,10 @@ export class DailyTrackerComponent implements OnInit {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
           // Swal.fire('Saved!', '', 'success')
-          this._firestoreService.updateRecord(this.oldRecord.id, record).then(() => {
+          this._dailyRecord.updateRecord(this.oldRecord.id!, record).subscribe(result => {
             this.toastr.info('Claim Number ' + record.claimNumber + ' updated ', 'Success')
             this.update = false;
             this.loadingSpinner = false;
-          }, error => {
-            console.log(error)
           })
         } else if (result.isDenied) {
           // Swal.fire('Changes are not saved', '', 'info')
@@ -218,9 +222,8 @@ export class DailyTrackerComponent implements OnInit {
         this.loadingSpinner = false;
       })
     } else {
-      this.dailyRecord.addRecord(record)
-      this._firestoreService.addNewrecord(record).then(() => {
-        this.toastr.success('Claim Number ' + record.claimNumber + ' added ', 'Success')
+      this._dailyRecord.addRecord(record).subscribe(() => {
+        this.getAllRecords()
         this.loadingSpinner = false;
       })
     }
@@ -249,25 +252,33 @@ export class DailyTrackerComponent implements OnInit {
     });
   }
 
-  getAllRecords(datePicker: Date) {
-    this._firestoreService.getRecords(datePicker).subscribe(allRecords => {
+  getAllRecords() {
+    this.obsRealtime = this._dailyRecord.getAllRecords().subscribe(result => {
       this.dataSource = []
-      allRecords.forEach((element: any) => {
+      result.records.forEach((elements: any) => {
         this.dataSource.push({
-          id: element.payload.doc.id,
-          date: element.payload.doc.data().date.toDate(),
-          status: element.payload.doc.data().status,
-          processedBy: element.payload.doc.data().processedBy,
-          exception: element.payload.doc.data().exception,
-          exception2: element.payload.doc.data().exception2,
-          client: element.payload.doc.data().client,
-          assignment: element.payload.doc.data().assignmentType,
-          claimNumber: element.payload.doc.data().claimNumber,
-          // ...element.payload.doc.data()
+          id: elements._id,
+          ...elements
         })
       })
     })
-
+    // this._firestoreService.getRecords(datePicker).subscribe(allRecords => {
+    //   this.dataSource = []
+    //   allRecords.forEach((element: any) => {
+    //     this.dataSource.push({
+    //       id: element.payload.doc.id,
+    //       date: element.payload.doc.data().date.toDate(),
+    //       status: element.payload.doc.data().status,
+    //       processedBy: element.payload.doc.data().processedBy,
+    //       exception: element.payload.doc.data().exception,
+    //       exception2: element.payload.doc.data().exception2,
+    //       client: element.payload.doc.data().client,
+    //       assignment: element.payload.doc.data().assignment,
+    //       claimNumber: element.payload.doc.data().claimNumber,
+    //       // ...element.payload.doc.data()
+    //     })
+    //   })
+    // })
 
 
   }
@@ -331,16 +342,17 @@ export class DailyTrackerComponent implements OnInit {
 
   onDelete() {
     let claimNumber = this.oldRecord.claimNumber;
+    this._dailyRecord.deleteRecord(this.oldRecord.id!).subscribe(result => {
+      console.log("Deleted")
+    })
     this._firestoreService.deleteRecord(this.oldRecord.id).then(() => {
       this.toastr.error('Record delete with claim number ' + claimNumber, 'Record delete')
     })
     this.onCancel();
-
   }
 
   onSubmitSort() {
-    const newSort = this.sortForm.value;
-    this.getAllRecords(this.datePicker);
+    this.getAllRecords();
   }
 
   clearSort() {

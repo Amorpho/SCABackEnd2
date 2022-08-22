@@ -198,7 +198,7 @@
                *ngFor="let element of dataSource |
                filterPipe: claimNumberFastSearch: 'claimNumber' |
                filterPipe: statusFastSearch: 'status' |
-               filterPipe: assignmentTypeFastSearch: 'assignmentType' |
+               filterPipe: assignmentTypeFastSearch: 'assignment' |
                filterPipe: clientFastSearch: 'client' |
                filterPipe: processedFastSearch: 'processedBy'
               "
@@ -209,7 +209,7 @@
           <td>{{ element.date | date:'hh:mm a' }}</td>
           <td>{{ element.status  }}</td>
           <td>{{ element.processedBy  }} </td>
-          <td>{{ element.assignmentType  }}</td>
+          <td>{{ element.assignment  }}</td>
           <td>{{ element.client }}</td>
           <td>{{ element.exception  }}</td>
           <td>{{ element.exception2  }}</td>
